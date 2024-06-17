@@ -7,6 +7,13 @@ from llama_index.llms.groq import Groq
 from note_engine import note_engine
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.core.agent import ReActAgent
+from pdf import pdf_engine
+from llama_index.core import Settings
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name="BAAI/bge-small-en-v1.5"
+)
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -33,6 +40,13 @@ tools = [
         metadata=ToolMetadata(
             name="population_data",
             description="this gives information for the world population and demographics"
+        )
+    ),
+    QueryEngineTool(
+        query_engine=pdf_engine,
+        metadata=ToolMetadata(
+            name="india_data",
+            description="this gives detailed information about India the country"
         )
     )
 ]
